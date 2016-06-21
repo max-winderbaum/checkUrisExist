@@ -1,36 +1,29 @@
+var request = require('request');
 var countFound = 0;
 var countAll = 0;
 var domainFile = './domains.txt';
 var domainPostfix = '/framebust.html';
 
 function _testUrl(Url, callback) {
-	var http = require('http'),
-		url = require('url'),
-		callbackCalled = false;
-	var options = {
-		method: 'HEAD',
-		host: url.parse(Url).host,
-		port: 80,
-		path: url.parse(Url).pathname
-	};
-	var req = http.request(options, function (r) {
-		if (!callbackCalled) {
-			callback(r.statusCode == 200);
-			callbackCalled = true;
+	request({
+		url: 'https://' + Url,
+		timeout: 1000,
+	}, function (error, response, body) {
+		if (!error && response.statusCode == 200) {
+			callback(true);
+		} else {
+			request({
+				url: 'http://' + Url,
+				timeout: 1000,
+			}, function (error, response, body) {
+				if (!error && response.statusCode == 200) {
+					callback(true);
+				} else {
+					callback(false);
+				}
+			})
 		}
-		req.abort();
-	});
-	req.on('error', function () {
-		if (!callbackCalled) {
-			callback(false);
-			callbackCalled = true;
-		}
-		req.abort();
-	});
-	req.setTimeout(1000, function () {
-		req.abort();
-	});
-	req.end();
+	})
 }
 
 function testUrl(url, next) {
@@ -52,7 +45,7 @@ var lineReader = require('readline').createInterface({
 });
 
 lineReader.on('line', function (line) {
-	domains.push('http://' + line + domainPostfix);
+	domains.push(line + domainPostfix);
 });
 
 lineReader.on('close', processDomains);

@@ -1,0 +1,19 @@
+{
+  "name": "check_uris_exist",
+  "version": "1.0.0",
+  "description": "Check if URIs exist on servers",
+  "main": "check.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/max-winderbaum/checkUrisExist.git"
+  },
+  "author": "Max Winderbaum",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/max-winderbaum/checkUrisExist/issues"
+  },
+  "homepage": "https://github.com/max-winderbaum/checkUrisExist#readme"
+}
