@@ -9,14 +9,14 @@ function _testUrl(Url, callback) {
 		url: 'https://' + Url,
 		timeout: 1000,
 	}, function (error, response, body) {
-		if (!error && response.statusCode == 200) {
+		if (!error && response.statusCode == 200 && isFramebustHtml(body)) {
 			callback(true);
 		} else {
 			request({
 				url: 'http://' + Url,
 				timeout: 1000,
 			}, function (error, response, body) {
-				if (!error && response.statusCode == 200) {
+				if (!error && response.statusCode == 200 && isFramebustHtml(body)) {
 					callback(true);
 				} else {
 					callback(false);
@@ -24,6 +24,10 @@ function _testUrl(Url, callback) {
 			})
 		}
 	})
+}
+
+function isFramebustHtml(body) {
+	return body.indexOf('mixpo.com') > -1;
 }
 
 function testUrl(url, next) {
